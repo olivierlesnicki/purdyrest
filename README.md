@@ -8,14 +8,12 @@ yarn add purdyrest
 
 ## Super simple to use
 
-Purdyrequest is designed to be the simplest way to make RESTful calls.
+**purdyrequest** is designed to be the simplest way to make http calls to servers that follow **purdyrest** RESTful conventions.
 
 ```js
 const purdyrest = require('purdyrest');
 const { create } = purdyrest('http://my-purdyrest-server.ext');
-create({
-  hello: 'world'
-});
+create({ hello: 'world' }); 
 ```
 
 ## methods
