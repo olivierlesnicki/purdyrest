@@ -19,7 +19,9 @@ create({ hello: 'world' });
 
 ## Methods
 
-### create(body)
+### create
+
+`create(body)`
 
 ```js
 const purdyrest = require('purdyrest');
@@ -30,7 +32,9 @@ create({ foo: 'bar' });
 Sends a `POST` request to `http://my-purdyrest-server.ext` with
 `{ foo: 'bar' }` as a JSON body.
 
-### destroy(id)
+### destroy
+
+`destroy(id)`
 
 ```js
 const purdyrest = require('purdyrest');
@@ -40,7 +44,9 @@ destroy('custom-id');
 
 Sends a `DELETE` request to `http://my-purdyrest-server.ext/custom-id`.
 
-### filter(queryParams)
+### filter
+
+`filter(queryParams)`
 
 ```js
 const purdyrest = require('purdyrest');
@@ -62,7 +68,9 @@ find('custom-id');
 
 Sends a `GET` request to `http://my-purdyrest-server.ext/custom=id`.
 
-### replace(id, body)
+### replace
+
+`replace(id, body)`
 
 ```js
 const purdyrest = require('purdyrest');
@@ -73,7 +81,9 @@ replace('custom-id', { foo: 'bar' });
 Sends a `PUT` request to `http://my-purdyrest-server.ext/custom=id` with
 `{ foo: 'bar' }` as the JSON body.
 
-### update(id, body)
+### update
+
+`update(id, body)`
 
 ```js
 const purdyrest = require('purdyrest');
