@@ -1,0 +1,13 @@
+{
+  "name": "purdyrest",
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1"
+  },
+  "devDependencies": {
+    "mocha": "^3.4.2",
+    "sinon": "^2.3.1"
+  }
+}
