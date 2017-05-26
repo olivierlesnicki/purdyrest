@@ -1,11 +1,5 @@
 # purdyrest
 
-## Installation
-
-```
-yarn add purdyrest
-```
-
 ## Super simple to use
 
 **purdyrequest** is designed to be the simplest way to make http calls to
