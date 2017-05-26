@@ -1,5 +1,7 @@
 # purdyrest
 
+[![npm package](https://nodei.co/npm/purdyrequest.png)](https://nodei.co/npm/purdyrequest/)
+
 ## Super simple to use
 
 **purdyrequest** is designed to be the simplest way to make http calls to
