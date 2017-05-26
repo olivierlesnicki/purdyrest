@@ -19,7 +19,7 @@ create({ hello: 'world' });
 
 ## Methods
 
-### create
+### Create
 
 `create(body)`
 
@@ -32,7 +32,7 @@ create({ foo: 'bar' });
 Sends a `POST` request to `http://my-purdyrest-server.ext` with
 `{ foo: 'bar' }` as a JSON body.
 
-### destroy
+### Destroy
 
 `destroy(id)`
 
@@ -44,7 +44,7 @@ destroy('custom-id');
 
 Sends a `DELETE` request to `http://my-purdyrest-server.ext/custom-id`.
 
-### filter
+### Filter
 
 `filter(queryParams)`
 
@@ -56,7 +56,7 @@ filter({ foo: 'bar' });
 
 Sends a `GET` request to `http://my-purdyrest-server.ext?foo=bar`.
 
-### find
+### Find
 
 `find(id)`
 
@@ -68,7 +68,7 @@ find('custom-id');
 
 Sends a `GET` request to `http://my-purdyrest-server.ext/custom=id`.
 
-### replace
+### Replace
 
 `replace(id, body)`
 
@@ -81,7 +81,7 @@ replace('custom-id', { foo: 'bar' });
 Sends a `PUT` request to `http://my-purdyrest-server.ext/custom=id` with
 `{ foo: 'bar' }` as the JSON body.
 
-### update
+### Update
 
 `update(id, body)`
 
