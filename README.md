@@ -50,7 +50,9 @@ filter({ foo: 'bar' });
 
 Sends a `GET` request to `http://my-purdyrest-server.ext?foo=bar`.
 
-### find(id)
+### find
+
+`find(id)`
 
 ```js
 const purdyrest = require('purdyrest');
