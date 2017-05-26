@@ -1,6 +1,6 @@
 # purdyrest
 
-[![npm package](https://nodei.co/npm/purdyrequest.png)](https://nodei.co/npm/purdyrequest/)
+[![npm package](https://nodei.co/npm/purdyrest.png)](https://nodei.co/npm/purdyrest/)
 
 ## Super simple to use
 
