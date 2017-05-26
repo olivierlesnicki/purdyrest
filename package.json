@@ -1,5 +1,6 @@
 {
   "name": "purdyrest",
+  "main": "./index.js",
   "scripts": {
     "test": "mocha"
   },
