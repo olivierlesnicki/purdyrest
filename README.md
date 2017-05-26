@@ -30,7 +30,7 @@ create({ foo: 'bar' });
 ```
 
 Sends a `POST` request to `http://my-purdyrest-server.ext` with
-`{ foo: 'bar' }` as a JSON body.
+`{ foo: 'bar' }` as the body in JSON format.
 
 ### Destroy
 
@@ -79,7 +79,7 @@ replace('custom-id', { foo: 'bar' });
 ```
 
 Sends a `PUT` request to `http://my-purdyrest-server.ext/custom=id` with
-`{ foo: 'bar' }` as the JSON body.
+`{ foo: 'bar' }` as the body in JSON format.
 
 ### Update
 
@@ -92,4 +92,4 @@ update('custom-id', { foo: 'bar' });
 ```
 
 Sends a `PATCH` request to `http://my-purdyrest-server.ext/custom=id` with
-`{ foo: 'bar' }` as the JSON body.
+`{ foo: 'bar' }` as the body in JSON format.
