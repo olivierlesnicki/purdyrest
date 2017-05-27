@@ -1,4 +1,5 @@
 const url = require('url');
+const urljoin = require('url-join');
 const querystring = require('querystring');
 
 require('isomorphic-fetch');
@@ -46,7 +47,7 @@ const builds = [
     if (options.hasId) {
       const id = args[0];
 
-      baseUrl = url.resolve(baseUrl, `${String(id)}`);
+      baseUrl = urljoin(baseUrl, `${String(id)}`);
 
       if (options.hasBody) {
         body = args[1];
