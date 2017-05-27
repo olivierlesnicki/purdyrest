@@ -79,7 +79,7 @@ const builds = [
 }, {});
 
 
-const purdyrest = (url, { headers }) => Object.keys(builds).reduce((fns, build) => {
+const purdyrest = (url, { headers } = {}) => Object.keys(builds).reduce((fns, build) => {
   fns[build] = builds[build](url, { headers });
   return fns;
 }, {});

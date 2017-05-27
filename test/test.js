@@ -8,6 +8,11 @@ const calledWith = (purdyrest, ...args) => {
 
 describe('purdyrest(url, { headers })', function() {
 
+  it('does not throw if options are not provide', function() {
+    purdyrest('http://test.url');
+    assert.ok(true);
+  });
+
   describe('.create(body)', function() {
     it('calls purdyrest.__http with the correct argument', function() {
       purdyrest.__http = sinon.stub();
