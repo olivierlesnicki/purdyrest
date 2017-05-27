@@ -4,7 +4,7 @@ const { ObjectID, MongoClient: { connect }} = require('mongodb');
 
 module.exports = (MONGODB_URI, options = {}) => {
 
-  options.path = (options.path || '') + '/:collection';
+  options.path = (options.path || '') + '/:collectionName';
 
   const db = fn => async (req, res) => {
     const end = res.end;
@@ -17,7 +17,6 @@ module.exports = (MONGODB_URI, options = {}) => {
 
     // Expose the connection
     req.db = db;
-    req.db.records = db.collection('records');
 
     // Close the connection
     res.on('finish', () => {
@@ -37,22 +36,22 @@ module.exports = (MONGODB_URI, options = {}) => {
 
   const create = async (req, res) => {
     const { db: { records } } = req;
-    const { app, model } = req.params;
+    const { collectionName } = req.params;
     const data = await json(req);
     const _id = shortid.generate();
+    const collection = db.collection(collectionName);
 
-    const result = await records.insert({
-      _id, app, model, data
-    });
+    const result = await collection.insert(data);
 
     return Object.assign({}, data, { _id });
   };
 
   const find = async (req, res) => {
     const { db: { records } } = req;
-    const { app, model, id } = req.params;
+    const { collectionName, id } = req.params;
+    const collection = db.collection(collectionName);
 
-    const record = await records.findOne({ _id: id });
+    const record = await collection.findOne({ _id: id });
 
     if (!record) throw createError(404);
 
@@ -62,19 +61,17 @@ module.exports = (MONGODB_URI, options = {}) => {
   const filter = async (req, res) => {
     const { db } = req;
     const { filter } = req.query;
-    const { app, model, id } = req.params;
+    const { collectionName, id } = req.params;
+    const collection = db.collection(collectionName);
 
-    const arg = { app, model };
-    if (filter) arg.data = JSON.parse(filter);
-
-    const records = await db.records.find(arg).toArray();
+    const records = await collection.find(JSON.parse(filter)).toArray();
 
     return serialize(records);
   };
 
-  return micropurdyrest({
+  return db(micropurdyrest({
     create,
     find,
     filter
-  }, options);
+  }, options));
 };
