@@ -1,6 +1,6 @@
 const micropurdyrest = require('micro-purdyrest');
 const shortid = require('shortid');
-const { ObjectID, MongoClient: { connect }} = require('mongodb');
+const { ObjectID, MongoClient } = require('mongodb');
 
 module.exports = (MONGODB_URI, options = {}) => {
 
@@ -9,7 +9,7 @@ module.exports = (MONGODB_URI, options = {}) => {
   const db = fn => async (req, res) => {
     const end = res.end;
     const db = await new Promise((resolve, reject) => {
-      connect(MONGODB_URI, (err, db) => {
+      MongoClient.connect(MONGODB_URI, (err, db) => {
         if (err) { reject(err); }
         resolve(db);
       });
@@ -35,7 +35,10 @@ module.exports = (MONGODB_URI, options = {}) => {
   };
 
   const create = async (req, res) => {
-    const { db: { records } } = req;
+
+    console.log('here');
+
+    const { db } = req;
     const { collectionName } = req.params;
     const data = await json(req);
     const _id = shortid.generate();
@@ -47,31 +50,45 @@ module.exports = (MONGODB_URI, options = {}) => {
   };
 
   const find = async (req, res) => {
-    const { db: { records } } = req;
+
+    console.log('here');
+
+    const { db } = req;
     const { collectionName, id } = req.params;
     const collection = db.collection(collectionName);
 
     const record = await collection.findOne({ _id: id });
 
-    if (!record) throw createError(404);
+    if (!record) {
+      let error = new Error('Not Found');
+      error.statusCode = 404;
+      throw error;
+    }
 
     return serialize(record);
   };
 
   const filter = async (req, res) => {
+
+    console.log('here');
+
     const { db } = req;
-    const { filter } = req.query;
     const { collectionName, id } = req.params;
     const collection = db.collection(collectionName);
+    let { filter } = req.query;
 
-    const records = await collection.find(JSON.parse(filter)).toArray();
+    filter = filter ? JSON.parse(filter) : {};
+
+    const records = await collection.find(filter).toArray();
 
     return serialize(records);
   };
 
-  return db(micropurdyrest({
-    create,
-    find,
-    filter
-  }, options));
+  return db(
+    micropurdyrest({
+      create,
+      find,
+      filter
+    }, options)
+  );
 };

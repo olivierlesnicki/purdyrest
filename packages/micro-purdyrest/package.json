@@ -3,8 +3,19 @@
   "version": "1.0.6",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "test": "ava test/**/*.js"
+  },
   "dependencies": {
     "micro-cors": "^0.0.4",
-    "microrouter": "^2.1.1"
+    "micro-visualize": "^3.0.1",
+    "microrouter": "^2.1.1",
+    "url-join": "^2.0.2"
+  },
+  "devDependencies": {
+    "ava": "^0.19.1",
+    "micro": "^7.3.3",
+    "request-promise": "^4.2.1",
+    "test-listen": "^1.0.2"
   }
 }

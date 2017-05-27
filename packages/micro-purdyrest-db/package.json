@@ -3,9 +3,20 @@
   "version": "1.0.6",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "test": "ava test/**/*.js"
+  },
   "dependencies": {
     "micro-purdyrest": "^1.0.6",
     "mongodb": "^2.2.27",
     "shortid": "^2.2.8"
+  },
+  "devDependencies": {
+    "ava": "^0.19.1",
+    "micro": "^7.3.3",
+    "mock-require": "^2.0.2",
+    "request-promise": "^4.2.1",
+    "sinon": "^2.3.2",
+    "test-listen": "^1.0.2"
   }
 }

@@ -1,5 +1,7 @@
 const microrouter = require('microrouter');
 const microcors = require('micro-cors');
+const visualize = require('micro-visualize');
+const urljoin = require('url-join');
 
 const callWithOptions = (fn, options) => {
   if (options === true) return fn();
@@ -18,12 +20,22 @@ const handlerDefinitions = {
 };
 
 module.exports = (handlers, { cors, path = '' } = {}) => {
-  const fns = [];
+  const fns = [
+    visualize
+  ];
 
   // Collect handlers
   handlers = Object.keys(handlers).map(handler => {
     const { method, handlerPath } = handlerDefinitions[handler];
-    return microrouter[method](path + handlerPath, handlers[handler]);
+
+    path = path ? urljoin(path, handlerPath).replace(/\/$/, '') : handlerPath;
+    return microrouter[method](path, handlers[handler]);
+  });
+
+  handlers.push((req, res) => {
+    const error = new Error('Not Found');
+    error.statusCode = 404;
+    throw error;
   });
 
   // Activate cors
