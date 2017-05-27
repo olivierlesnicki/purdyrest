@@ -1,5 +1,7 @@
 # purdyrest
 
+[![Build Status](https://travis-ci.org/olivierlesnicki/purdyrest.svg?branch=master)](https://travis-ci.org/olivierlesnicki/purdyrest)
+
 [![npm package](https://nodei.co/npm/purdyrest.png)](https://nodei.co/npm/purdyrest/)
 
 ## Super simple to use
