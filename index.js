@@ -8,7 +8,7 @@ const http = (url, {
   headers = {},
   body
 }) => {
-  return fetch(`${URI}/${url}`, {
+  return fetch(url, {
     method,
     headers,
     body: body && JSON.stringify(body),
