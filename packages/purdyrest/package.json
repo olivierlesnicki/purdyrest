@@ -1,0 +1,17 @@
+{
+  "name": "purdyrest",
+  "main": "index.js",
+  "version": "1.0.4",
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
+    "url-join": "^2.0.2"
+  },
+  "devDependencies": {
+    "mocha": "^3.4.2",
+    "release-it": "^2.7.3",
+    "sinon": "^2.3.1"
+  }
+}
