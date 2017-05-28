@@ -1,15 +1,15 @@
 {
   "name": "micro-purdyrest-db",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "test": "ava test/**/*.js"
   },
   "dependencies": {
-    "micro-purdyrest": "^1.0.6",
-    "mongodb": "^2.2.27",
     "micro": "^7.3.3",
+    "micro-purdyrest": "^1.0.7",
+    "mongodb": "^2.2.27",
     "shortid": "^2.2.8"
   },
   "devDependencies": {
