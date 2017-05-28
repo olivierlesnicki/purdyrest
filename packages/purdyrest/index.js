@@ -17,7 +17,7 @@ const handlerDefinitions = [
 ];
 
 const purdyrest = (handlers = {}) => req => {
-  req.params = {};
+  req.params = req.params || {};
 
   const hd = handlerDefinitions.find(hd => {
     if (req.method === hd.method) {
@@ -37,9 +37,7 @@ const purdyrest = (handlers = {}) => req => {
   });
 
   if (!hd || !handlers[hd.name]) {
-    let error = new Error('Method Not Allowed');
-    error.statusCode = 405;
-    throw error;
+    throw Error('[405] Method Not Allowed');
   }
 
   return handlers[hd.name](req);

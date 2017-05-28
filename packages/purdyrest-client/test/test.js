@@ -6,7 +6,7 @@ const calledWith = (purdyrest, ...args) => {
   assert.deepEqual(purdyrest.__http.args[0], [...args]);
 }
 
-describe('purdyrest(url, { headers })', function() {
+describe('purdyrest-client(url, { headers })', function() {
 
   it('does not throw if options are not provide', function() {
     purdyrest('http://test.url');

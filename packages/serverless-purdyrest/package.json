@@ -1,6 +1,6 @@
 {
-  "name": "purdyrest",
-  "version": "1.0.7",
+  "name": "serverless-purdyrest",
+  "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "test": "mocha test/**/*.js"
