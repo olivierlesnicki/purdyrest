@@ -19,24 +19,19 @@ const handlerDefinitions = {
   update: handlerDefinition('patch', '/:id')
 };
 
-module.exports = (handlers, { cors, path = '' } = {}) => {
-  const fns = [
-    visualize
-  ];
+module.exports = (handlers, { cors, visualize, path = '' } = {}) => {
+  const fns = [];
 
   // Collect handlers
   handlers = Object.keys(handlers).map(handler => {
     const { method, handlerPath } = handlerDefinitions[handler];
 
-    path = path ? urljoin(path, handlerPath).replace(/\/$/, '') : handlerPath;
-    return microrouter[method](path, handlers[handler]);
+    let fullpath = path ? urljoin(path, handlerPath).replace(/\/$/, '') : handlerPath;
+    return microrouter[method](fullpath, handlers[handler]);
   });
 
-  handlers.push((req, res) => {
-    const error = new Error('Not Found');
-    error.statusCode = 404;
-    throw error;
-  });
+  // Activate visualize
+  if (visualize) fns.push(visualize);
 
   // Activate cors
   if (cors) fns.push(callWithOptions(microcors, cors));

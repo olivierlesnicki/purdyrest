@@ -102,3 +102,22 @@ test('path passes', async t => {
     foo: 'bar'
   }, 'does not return correct body');
 });
+
+test('find and filter pass', async t => {
+  const service = micro(micropurdyrest({
+    find: (req, res) => ({ foo: 'bar' }),
+    filter: (req, res) => ({ fee: 'baz' })
+  }));
+  const url = await listen(service);
+  let body = await request(url + '/id', { method: 'GET', json: true });
+
+  t.deepEqual(body, {
+    foo: 'bar'
+  }, 'does not return correct body');
+
+  body = await request(url, { method: 'GET', json: true });
+
+  t.deepEqual(body, {
+    fee: 'baz'
+  }, 'does not return correct body');
+});
