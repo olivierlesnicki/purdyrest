@@ -17,7 +17,6 @@ const handlerDefinitions = [
 ];
 
 const purdyrest = (handlers = {}) => req => {
-  req.params = req.params || {};
 
   const hd = handlerDefinitions.find(hd => {
     if (req.method === hd.method) {
