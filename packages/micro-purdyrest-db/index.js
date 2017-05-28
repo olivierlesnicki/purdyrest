@@ -1,3 +1,4 @@
+const { json } = require('micro');
 const micropurdyrest = require('micro-purdyrest');
 const shortid = require('shortid');
 const { ObjectID, MongoClient } = require('mongodb');
@@ -7,7 +8,6 @@ module.exports = (MONGODB_URI, options = {}) => {
   options.path = (options.path || '') + '/:collectionName';
 
   const db = fn => async (req, res) => {
-    const end = res.end;
     const db = await new Promise((resolve, reject) => {
       MongoClient.connect(MONGODB_URI, (err, db) => {
         if (err) { reject(err); }
@@ -30,14 +30,11 @@ module.exports = (MONGODB_URI, options = {}) => {
     if (Array.isArray(record)) {
       return record.map(serialize);
     } else {
-      return Object.assign({}, record.data, { _id: record._id });
+      return Object.assign({}, record, { _id: record._id });
     }
   };
 
-  const create = async (req, res) => {
-
-    console.log('here');
-
+  const create = db(async (req, res) => {
     const { db } = req;
     const { collectionName } = req.params;
     const data = await json(req);
@@ -47,12 +44,9 @@ module.exports = (MONGODB_URI, options = {}) => {
     const result = await collection.insert(data);
 
     return Object.assign({}, data, { _id });
-  };
+  });
 
-  const find = async (req, res) => {
-
-    console.log('here');
-
+  const find = db(async (req, res) => {
     const { db } = req;
     const { collectionName, id } = req.params;
     const collection = db.collection(collectionName);
@@ -66,14 +60,12 @@ module.exports = (MONGODB_URI, options = {}) => {
     }
 
     return serialize(record);
-  };
+  });
 
-  const filter = async (req, res) => {
-
-    console.log('here');
+  const filter = db(async (req, res) => {
 
     const { db } = req;
-    const { collectionName, id } = req.params;
+    const { collectionName } = req.params;
     const collection = db.collection(collectionName);
     let { filter } = req.query;
 
@@ -82,13 +74,11 @@ module.exports = (MONGODB_URI, options = {}) => {
     const records = await collection.find(filter).toArray();
 
     return serialize(records);
-  };
+  });
 
-  return db(
-    micropurdyrest({
-      create,
-      find,
-      filter
-    }, options)
-  );
+  return micropurdyrest({
+    create,
+    find,
+    filter
+  }, options)
 };

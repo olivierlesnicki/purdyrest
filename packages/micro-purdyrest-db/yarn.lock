@@ -1891,7 +1891,7 @@ micro-purdyrest@^1.0.6:
     micro-cors "^0.0.4"
     microrouter "^2.1.1"
 
-micro@^7.3.3:
+micro@^7.3.2:
   version "7.3.3"
   resolved "https://registry.yarnpkg.com/micro/-/micro-7.3.3.tgz#8261c56d2a31a7df93986eff86441396f2b4b070"
   dependencies:
