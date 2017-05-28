@@ -2,6 +2,9 @@
   "repository": "git@github.com:olivierlesnicki/purdyrest.git",
   "author": "Olivier Lesnicki <olivier.lesnicki@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "test": "lerna run test"
+  },
   "dependencies": {
     "lerna": "^2.0.0-rc.5"
   }

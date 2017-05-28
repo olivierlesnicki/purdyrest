@@ -65,7 +65,7 @@ test('replace passes', async t => {
   }, 'does not return correct body');
 });
 
-test('replace passes', async t => {
+test('update passes', async t => {
   const service = micro(micropurdyrest({
     update: (req, res) => ({ foo: 'bar' })
   }));
@@ -82,7 +82,7 @@ test('cors passes', async t => {
     update: (req, res) => ({ foo: 'bar' })
   }, { cors: true }));
   const url = await listen(service);
-  const headers = await request(url + '/id', { method: 'PATCH', json: true, transform: (body, { headers }) => headers });
+  const headers = await request(url + '/id', { method: 'PATCH', json: true, body: {}, transform: (body, { headers }) => headers });
 
   t.is(headers['access-control-allow-origin'], '*', 'does not return correct correct access-control-allow-origin header');
   t.is(headers['access-control-max-age'], '86400', 'does not return correct correct access-control-max-age header');

@@ -1,3 +1,4 @@
+const { json } = require('micro');
 const microrouter = require('microrouter');
 const microcors = require('micro-cors');
 const visualize = require('micro-visualize');
@@ -8,26 +9,37 @@ const callWithOptions = (fn, options) => {
   return fn(options);
 };
 
-const handlerDefinition = (method, handlerPath) => ({ method, handlerPath })
+const handlerDefinition = (method, handlerPath, hasBody = false) => ({ method, handlerPath, hasBody })
 
 const handlerDefinitions = {
-  create: handlerDefinition('post', '/'),
+  create: handlerDefinition('post', '/', true),
   destroy: handlerDefinition('del', '/:id'),
   filter: handlerDefinition('get', '/'),
   find: handlerDefinition('get', '/:id'),
-  replace: handlerDefinition('put', '/:id'),
-  update: handlerDefinition('patch', '/:id')
+  replace: handlerDefinition('put', '/:id', true),
+  update: handlerDefinition('patch', '/:id', true)
+};
+
+const parseBody = fn => async (req, res) => {
+  if (!req.body) {
+    req.body = await json(req);
+  }
+
+  return fn(req, res);
 };
 
 module.exports = (handlers, { cors, visualize, path = '' } = {}) => {
   const fns = [];
 
   // Collect handlers
-  handlers = Object.keys(handlers).map(handler => {
-    const { method, handlerPath } = handlerDefinitions[handler];
+  handlers = Object.keys(handlers).map(handlerName => {
+    const { method, handlerPath, hasBody } = handlerDefinitions[handlerName];
+    const fullpath = path ? urljoin(path, handlerPath).replace(/\/$/, '') : handlerPath;
 
-    let fullpath = path ? urljoin(path, handlerPath).replace(/\/$/, '') : handlerPath;
-    return microrouter[method](fullpath, handlers[handler]);
+    let handler = handlers[handlerName];
+    if (hasBody) handler = parseBody(handler);
+
+    return microrouter[method](fullpath, handler);
   });
 
   // Activate visualize

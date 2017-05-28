@@ -37,7 +37,7 @@ module.exports = (MONGODB_URI, options = {}) => {
   const create = db(async (req, res) => {
     const { db } = req;
     const { collectionName } = req.params;
-    const data = await json(req);
+    const data = req.body;
     const _id = shortid.generate();
     const collection = db.collection(collectionName);
 
