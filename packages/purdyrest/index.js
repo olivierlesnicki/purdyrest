@@ -1,89 +1,48 @@
-const url = require('url');
-const urljoin = require('url-join');
-const querystring = require('querystring');
-
-require('isomorphic-fetch');
-
-const http = (url, {
+const handlerDefinition = (name, method, root) => ({
+  name,
   method,
-  headers = {},
-  body
-}) => {
-  return fetch(url, {
-    method,
-    headers,
-    body: body && JSON.stringify(body),
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      } else {
-        throw res.statusText;
+  root: !!root
+});
+
+// Alias handlerDefinition
+const hd = handlerDefinition;
+
+const handlerDefinitions = [
+  hd('find', 'GET'),
+  hd('filter', 'GET', true),
+  hd('update', 'PATCH'),
+  hd('replace', 'PUT'),
+  hd('destroy', 'DELETE'),
+  hd('create', 'POST', true)
+];
+
+const purdyrest = (handlers = {}) => req => {
+  req.params = {};
+
+  const hd = handlerDefinitions.find(hd => {
+    if (req.method === hd.method) {
+
+      if (hd.root && req.url === '/') {
+        return true;
       }
-    });
+
+      if (!hd.root && req.url !== '/') {
+        req.params._id = req.params._id || req.url.replace(/^\//g, '');
+        return true;
+      }
+
+      return false;
+
+    }
+  });
+
+  if (!hd || !handlers[hd.name]) {
+    let error = new Error('Method Not Allowed');
+    error.statusCode = 405;
+    throw error;
+  }
+
+  return handlers[hd.name](req);
 };
-
-const methods = [ 'get', 'delete', 'patch', 'post', 'put' ].reduce((methods, method) => {
-  methods[method] = (url, { headers, body }) => purdyrest.__http(url, { method, headers, body });
-  return methods;
-}, {});
-
-const build = (name, method, options = {}) => ({ name, method, options });
-
-const builds = [
-  build('create', 'post', { hasBody: true }),
-  build('filter', 'get'),
-  build('find', 'get', { hasId: true }),
-  build('replace', 'put', { hasId: true, hasBody: true }),
-  build('update', 'patch', { hasId: true, hasBody: true }),
-  build('destroy', 'delete', { hasId: true })
-].reduce((builds, build) => {
-  builds[build.name] = (baseUrl, { headers }) => (...args) => {
-    const methodOptions = { headers };
-    const { options } = build;
-    let filter;
-    let body;
-
-    if (options.hasId) {
-      const id = args[0];
-
-      baseUrl = urljoin(baseUrl, `${String(id)}`);
-
-      if (options.hasBody) {
-        body = args[1];
-        filter = args[2];
-      } else {
-        filter = args[1];
-      }
-    } else {
-      if (options.hasBody) {
-        body = args[0];
-        filter = args[1];
-      } else {
-        filter = args[0];
-      }
-    }
-
-    if (body) {
-      methodOptions.body = body;
-    }
-
-    if (filter) {
-      baseUrl = baseUrl + '?' + querystring.stringify(filter);
-    }
-
-    return methods[build.method](baseUrl, methodOptions);
-  };
-
-  return builds;
-}, {});
-
-
-const purdyrest = (url, { headers } = {}) => Object.keys(builds).reduce((fns, build) => {
-  fns[build] = builds[build](url, { headers });
-  return fns;
-}, {});
-
-purdyrest.__http = http;
 
 module.exports = purdyrest;

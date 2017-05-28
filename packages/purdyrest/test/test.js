@@ -1,111 +1,29 @@
 const purdyrest = require('..');
-const assert = require('assert');
-const sinon = require('sinon');
+const test = require('ava');
 
-const calledWith = (purdyrest, ...args) => {
-  assert.deepEqual(purdyrest.__http.args[0], [...args]);
-}
+test(t => {
 
-describe('purdyrest(url, { headers })', function() {
-
-  it('does not throw if options are not provide', function() {
-    purdyrest('http://test.url');
-    assert.ok(true);
+  const app = purdyrest({
+    find: ({params: {_id}}) => `found/${_id}`,
+    filter: req => 'filtered',
+    replace: ({params: {_id}}) => `replaced/${_id}`,
+    update: ({params: {_id}}) => `updated/${_id}`,
+    destroy: ({params: {_id}}) => `destroyed/${_id}`,
+    create: ({params: {_id}}) => `created`
   });
 
-  describe('.create(body)', function() {
-    it('calls purdyrest.__http with the correct argument', function() {
-      purdyrest.__http = sinon.stub();
+  t.deepEqual(app({ url: '/my-id', method: 'GET' }), 'found/my-id', 'does not call find correctly');
+  t.deepEqual(app({ url: '/', method: 'GET' }), 'filtered', 'does not call filter correctly');
+  t.deepEqual(app({ url: '/my-id', method: 'PUT' }), 'replaced/my-id', 'does not call replace correctly');
+  t.deepEqual(app({ url: '/my-id', method: 'PATCH' }), 'updated/my-id', 'does not call update correctly');
+  t.deepEqual(app({ url: '/my-id', method: 'DELETE' }), 'destroyed/my-id', 'does not call destroy correctly');
+  t.deepEqual(app({ url: '/', method: 'POST' }), 'created', 'does not call create correctly');
 
-      purdyrest('https://test.url', { headers: { foo: 'bar'} })
-        .create({ fee: 'baz' });
+});
 
-      calledWith(purdyrest, 'https://test.url', {
-        method: 'post',
-        headers: { foo: 'bar'},
-        body: { fee: 'baz' }
-      });
-    });
-  });
-
-  describe('.filter(query)', function() {
-    it('calls purdyrest.__http with the correct argument', function() {
-      purdyrest.__http = sinon.stub();
-
-      purdyrest('https://test.url', { headers: { foo: 'bar'} })
-        .filter({ fee: 'baz' });
-
-      calledWith(purdyrest, 'https://test.url?fee=baz', {
-        body: undefined,
-        method: 'get',
-        headers: { foo: 'bar'}
-      });
-
-    });
-  });
-
-  describe('.find(id)', function() {
-    it('calls purdyrest.__http with the correct argument', function() {
-      purdyrest.__http = sinon.stub();
-
-      purdyrest('https://test.url', { headers: { foo: 'bar'} })
-        .find("abc");
-
-      calledWith(purdyrest, 'https://test.url/abc', {
-        body: undefined,
-        method: 'get',
-        headers: { foo: 'bar'}
-      });
-
-    });
-  });
-
-  describe('.replace(id, body)', function() {
-    it('calls purdyrest.__http with the correct argument', function() {
-      purdyrest.__http = sinon.stub();
-
-      purdyrest('https://test.url', { headers: { foo: 'bar'} })
-        .replace("abc", { fee: 'baz' });
-
-      calledWith(purdyrest, 'https://test.url/abc', {
-        body: { fee: 'baz' },
-        method: 'put',
-        headers: { foo: 'bar'}
-      });
-
-    });
-  });
-
-  describe('.update(id, body)', function() {
-    it('calls purdyrest.__http with the correct argument', function() {
-      purdyrest.__http = sinon.stub();
-
-      purdyrest('https://test.url', { headers: { foo: 'bar'} })
-        .update("abc", { fee: 'baz' });
-
-      calledWith(purdyrest, 'https://test.url/abc', {
-        body: { fee: 'baz' },
-        method: 'patch',
-        headers: { foo: 'bar'}
-      });
-
-    });
-  });
-
-  describe('.destroy(id)', function() {
-    it('calls purdyrest.__http with the correct argument', function() {
-      purdyrest.__http = sinon.stub();
-
-      purdyrest('https://test.url', {})
-        .destroy("abc");
-
-      calledWith(purdyrest, 'https://test.url/abc', {
-        body: undefined,
-        method: 'delete',
-        headers: undefined
-      });
-
-    });
-  });
-
+test(t => {
+  const app = purdyrest();
+  const error = t.throws(() => app({ url: '/my-id', method: 'GET' }), Error);
+  t.is(error.message, 'Method Not Allowed', 'does not throw the correct message');
+  t.is(error.statusCode, 405, 'does not throw the correct status code');
 });

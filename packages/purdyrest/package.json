@@ -1,16 +1,13 @@
 {
   "name": "purdyrest",
+  "version": "1.0.7",
   "main": "index.js",
-  "version": "1.0.8",
   "scripts": {
-    "test": "mocha test/**/*.js"
+    "test": "ava test/**/*.js"
   },
-  "dependencies": {
-    "isomorphic-fetch": "^2.2.1",
-    "url-join": "^2.0.2"
-  },
+  "license": "MIT",
   "devDependencies": {
-    "mocha": "^3.4.2",
-    "sinon": "^2.3.1"
+    "ava": "^0.19.1",
+    "sinon": "^2.3.2"
   }
 }
