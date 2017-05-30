@@ -20,6 +20,7 @@ const purdyrest = (handlers = {}) => req => {
 
   const hd = handlerDefinitions.find(hd => {
     if (req.method === hd.method) {
+      req.params = req.params || {};
 
       if (hd.root && req.url === '/') {
         return true;
